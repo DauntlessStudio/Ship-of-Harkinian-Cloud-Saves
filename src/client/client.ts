@@ -32,7 +32,7 @@ class CloudSaveClient {
         try {
             console.log("Starting SoH...");
             const process = new Deno.Command(this.getSohPath(), {
-                cwd: this.options.path_to_soh,
+                cwd: this.options.path_to_soh
             });
 
             const result = await process.output();
@@ -102,7 +102,7 @@ class CloudSaveClient {
         if (platform === "windows") {
             sohPath = path.join(sohPath, "soh.exe");
         } else if (platform === "linux") {
-            sohPath = path.join(sohPath, "soh.appimage");
+            sohPath = "./soh.appimage";
         } else if (platform === "darwin") {
             sohPath = path.join(sohPath, "soh.app", "Contents", "MacOS", "SoH");
         }
