@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "serve": "deno run -A src/server/server.ts",
+    "run": "deno run -A src/client/client.ts",
+    "compile": "deno run -A src/compile.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/cli": "jsr:@std/cli@^1.0.15",
+    "@std/path": "jsr:@std/path@^1.0.8"
+  }
+}
