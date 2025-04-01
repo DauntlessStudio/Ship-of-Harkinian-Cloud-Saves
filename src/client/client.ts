@@ -41,6 +41,7 @@ class CloudSaveClient {
             await this.POSTSaveData(this.readSaveData());
             Deno.exit(0);
         } catch (_error) {
+            console.error(`Failed to launch executable at ${this.getSohPath()}`);
             alert("Error starting SoH. Is your `path_to_soh` correct in cloud_save_options.json?");
             Deno.exit(1);
         }
@@ -90,7 +91,7 @@ class CloudSaveClient {
                 alert("Failed to upload save data: " + response.statusText);
             }
         } catch (error) {
-            console.error("Error posting save data:", error);
+            alert("Error posting save data: " + error);
         }
     }
 

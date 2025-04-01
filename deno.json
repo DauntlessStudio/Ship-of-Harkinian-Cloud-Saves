@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "tasks": {
     "serve": "deno run -A src/server/server.ts",
     "run": "deno run -A src/client/client.ts",
