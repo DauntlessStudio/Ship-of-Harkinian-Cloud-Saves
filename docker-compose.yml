@@ -1,9 +1,11 @@
 services:
   soh-cloud-save:
-    build:
-      context: .
-      dockerfile: dockerfile
+    image: denoland/deno:latest
     container_name: soh-cloud-save
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./saves:/app/saves
     env_file:
       - .env
     environment:
@@ -11,5 +13,4 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
-    volumes:
-      - ./saves:/app/saves
+    command: sh -c "if [ -f .env ]; then echo 'Found .env'; else touch .env; fi && deno task serve"
