@@ -1,5 +1,4 @@
 import type { SaveData } from "../shared/types.ts";
-import { promptSecret } from "@std/cli";
 
 interface ServerOptions {
     host?: string;
@@ -128,19 +127,8 @@ class CloudSaveServer {
     }
 }
 
-async function getPassword(): Promise<Uint8Array> {
-    try {
-        return Deno.readFileSync("./pass");
-    } catch (_error) {
-        const promptResult = promptSecret("Password?") ?? "";
-        const password = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(promptResult)));
-        Deno.writeFileSync("./pass", password ? password : new Uint8Array());
-        return password;
-    }
-}
-
-const host = prompt("Host IP Address?", "0.0.0.0") ?? undefined;
-const port = prompt("Host Port?", "8080") ?? undefined;
-const pass = await getPassword();
+const host = Deno.env.get("HOST");
+const port = Deno.env.get("PORT");
+const pass = Deno.env.has("PASS") ? new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(Deno.env.get("pass")))) : undefined;
 
 new CloudSaveServer({host, port, pass}).start();
