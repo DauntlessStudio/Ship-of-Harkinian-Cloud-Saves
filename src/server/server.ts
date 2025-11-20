@@ -96,6 +96,7 @@ class CloudSaveServer {
             try {
                 const contents = Deno.readTextFileSync("./saves/" + name + ".sav");
                 data[name as keyof SaveData] = contents;
+                console.log(`Reading ${name}.sav`);
             } catch (_error) {
                 // Ignore error if file does not exist
             }
@@ -116,9 +117,11 @@ class CloudSaveServer {
 
             if (contents) {
                 Deno.writeTextFileSync("./saves/" + name + ".sav", contents);
+                console.log(`Wrote ${name}.sav`);
             } else {
                 try {
                     Deno.removeSync("./saves/" + name + ".sav");
+                    console.log(`Removed ${name}.sav`);
                 } catch (_error) {
                     // Ignore error if file does not exist
                 }
