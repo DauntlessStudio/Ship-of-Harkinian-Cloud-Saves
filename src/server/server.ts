@@ -39,7 +39,8 @@ class CloudSaveServer {
             async (req: Request) => {
                 switch (req.method) {
                     case "POST": {
-                        console.log("POST request received");
+                        const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || (req as any).remoteAddr?.hostname || "unknown";
+                        console.log(`POST request received from IP: ${ip}`);
 
                         if (req.headers.get("Content-Type") !== "application/json") {
                             return new Response(JSON.stringify({ message: "Invalid Content-Type" }), { status: 400 });
@@ -59,7 +60,8 @@ class CloudSaveServer {
                         }
                     }
                     case "GET": {
-                        console.log("GET request received");
+                        const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || (req as any).remoteAddr?.hostname || "unknown";
+                        console.log(`GET request received from IP: ${ip}`);
 
                         if (req.headers.get("Authorization") !== `Bearer ${this.pass}`) {
                             console.log("Unauthorized access attempt");
