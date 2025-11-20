@@ -1,4 +1,4 @@
-FROM denoland/deno:alpine-1.41.0
+FROM denoland/deno:latest
 
 # Set working directory
 WORKDIR /app

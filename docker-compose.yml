@@ -1,0 +1,15 @@
+services:
+  soh-cloud-save:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: soh-cloud-save
+    env_file:
+      - .env
+    environment:
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - ./saves:/app/saves
