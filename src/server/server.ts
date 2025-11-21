@@ -9,13 +9,13 @@ interface ServerOptions {
 class CloudSaveServer {
     private readonly host: string;
     private readonly port: string;
-    private readonly pass: Uint8Array;
+    private readonly pass: Uint8Array|undefined;
     private server?: Deno.HttpServer<Deno.NetAddr>;
 
     constructor(options?: ServerOptions) {
         this.host = options?.host ?? "0.0.0.0";
         this.port = options?.port ?? "8080";
-        this.pass = options?.pass ?? new Uint8Array();
+        this.pass = options?.pass;
     }
 
     public start(): void {
@@ -39,8 +39,7 @@ class CloudSaveServer {
             async (req: Request) => {
                 switch (req.method) {
                     case "POST": {
-                        const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || (req as any).remoteAddr?.hostname || "unknown";
-                        console.log(`POST request received from IP: ${ip}`);
+                        console.log(`POST request received`);
 
                         if (req.headers.get("Content-Type") !== "application/json") {
                             return new Response(JSON.stringify({ message: "Invalid Content-Type" }), { status: 400 });
@@ -60,8 +59,7 @@ class CloudSaveServer {
                         }
                     }
                     case "GET": {
-                        const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || (req as any).remoteAddr?.hostname || "unknown";
-                        console.log(`GET request received from IP: ${ip}`);
+                        console.log("GET request received");
 
                         if (req.headers.get("Authorization") !== `Bearer ${this.pass}`) {
                             console.log("Unauthorized access attempt");
@@ -134,6 +132,6 @@ class CloudSaveServer {
 
 const host = Deno.env.get("HOST");
 const port = Deno.env.get("PORT");
-const pass = Deno.env.has("PASS") ? new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(Deno.env.get("pass")))) : undefined;
+const pass = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(Deno.env.get("PASS") ?? "")));
 
 new CloudSaveServer({host, port, pass}).start();
